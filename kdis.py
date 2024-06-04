@@ -45,7 +45,9 @@ for n,i in enumerate(hrefs_dd):
     # oname = '.'.join([sname[:64], ext])
     # target_fils.append(htm_fil_f / oname)
     exec("num = f'{n:0%dd}'" % fil_digits)
-    oname = '_'.join([num, names_dd[n]])
+    unsafename = names_dd[n]
+    safename = ''.join(i if i not in r'\/:*?"<>|' else '_' for i in unsafename)
+    oname = '_'.join([num, safename])
     target_fils.append(htm_fil_dl / oname)
 
 giveup=0
