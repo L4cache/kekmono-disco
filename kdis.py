@@ -21,20 +21,31 @@ with open(htm_fil_p, encoding='utf-8') as fil:
     soup = bs4.BeautifulSoup(fil)
 ass = soup.find_all('a')
 hrefs = [i['href'] for i in ass]
+hrefs = [i for i in hrefs if '/data//' in i]
+names = [i.split('?f=')[1] for i in hrefs]
 hrefs = [i.split('?f=')[0] for i in hrefs]
+'''
 hrefs_dd = []
-for i in hrefs:
+names_dd = []
+for n,i in enumerate(hrefs):
     if not i in hrefs_dd and '/data//' in i:
         hrefs_dd.append(i)
+        names_dd.append(names[n])
+'''
+hrefs_dd = hrefs
+names_dd = names
+
 tot = len(hrefs_dd)
 
 target_fils = []
+fil_digits=len(str(tot))
 for n,i in enumerate(hrefs_dd):
     fname = i.split('/')[-1]
-    sname, ext = fname.split('.')
+    # sname, ext = fname.split('.')
     # oname = '.'.join([sname[:64], ext])
     # target_fils.append(htm_fil_f / oname)
-    oname = '.'.join([f'{n:07d}', ext])
+    exec("num = f'{n:0%dd}'" % fil_digits)
+    oname = '_'.join([num, names_dd[n]])
     target_fils.append(htm_fil_dl / oname)
 
 giveup=0
