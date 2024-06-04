@@ -50,6 +50,7 @@ for n,i in enumerate(hrefs_dd):
     oname = '_'.join([num, safename])
     target_fils.append(htm_fil_dl / oname)
 
+sus=requests.Session()
 giveup=0
 for n,i in enumerate(zip(hrefs_dd, target_fils)):
     srv_hash = i[0].split('/')[-1].split('.')[0]
@@ -61,7 +62,7 @@ for n,i in enumerate(zip(hrefs_dd, target_fils)):
     downloading=1
     while downloading:
         try:
-            resp = requests.get(i[0])
+            resp = sus.get(i[0])
             if resp.status_code != 200:
                 raise ValueError(f'response not ok, code: {resp.status_code}')
             with open(i[1],'wb') as out:
