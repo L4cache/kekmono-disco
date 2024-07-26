@@ -82,4 +82,5 @@ if not giveup:
     print('All files downloaded')
 else:
     print(f'{giveup} files not downloaded')
+sus.close()
 os.system('pause')
