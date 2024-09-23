@@ -4,7 +4,7 @@ import requests
 import hashlib
 import os
 import re
-def get_file_hash(file:str,blksize:int=32<<20):
+def get_file_hash(file:str,blksize:int=4<<20):
     sha256_hash = hashlib.sha256()
     with open(file,"rb") as f:
         for byte_block in iter(lambda: f.read(blksize),b""):
