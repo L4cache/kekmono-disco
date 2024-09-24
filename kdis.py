@@ -17,6 +17,25 @@ htm_fil_f = htm_fil_p.parent / (htm_fil_p.name.split('.')[0]+'_files')
 htm_fil_dl= htm_fil_f / 'originals'
 htm_fil_dl.mkdir(exist_ok=True)
 
+cookies = None
+cookie_file = htm_fil_p.parent / 'cookies.txt'
+if cookie_file.exists():
+    from http.cookiejar import MozillaCookieJar
+    cookies = MozillaCookieJar()
+    loaded_cookies = MozillaCookieJar()
+    loaded_cookies.load(cookie_file)
+
+    for cookie in loaded_cookies:
+        if cookie.domain.startswith('www.'):
+            cookie.domain = cookie.domain[3:]
+            cookie.domain_specified = True
+            cookie.domain_initial_dot = True
+        elif not cookie.domain.startswith('.'):
+            cookie.domain = f'.{cookie.domain}'
+            cookie.domain_specified = True
+            cookie.domain_initial_dot = True
+        cookies.set_cookie(cookie)
+
 with open(htm_fil_p, encoding='utf-8') as fil:
     soup = bs4.BeautifulSoup(fil)
 ass = soup.find_all('a')
@@ -62,7 +81,7 @@ for n,i in enumerate(zip(hrefs_dd, target_fils)):
     downloading=1
     while downloading:
         try:
-            resp = sus.get(i[0])
+            resp = sus.get(i[0],cookies=cookies)
             if resp.status_code != 200:
                 raise ValueError(f'response not ok, code: {resp.status_code}')
             with open(i[1],'wb') as out:
