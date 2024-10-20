@@ -3,6 +3,10 @@ import bs4
 import requests
 import hashlib
 import os
+import sys
+arg_name = False
+if len(sys.argv) > 1:
+    arg_name = sys.argv[1]
 def get_file_hash(file:str,blksize:int=4<<20):
     sha256_hash = hashlib.sha256()
     with open(file,"rb") as f:
@@ -10,7 +14,10 @@ def get_file_hash(file:str,blksize:int=4<<20):
             sha256_hash.update(byte_block)
     return sha256_hash.hexdigest().lower()
 
-htm_fil = input('htm(l) file name: ')
+if arg_name:
+    htm_fil = arg_name
+else:
+    htm_fil = input('htm(l) file name: ')
 htm_fil = htm_fil.strip('"')
 htm_fil_p = pathlib.Path(htm_fil).absolute()
 htm_fil_f = htm_fil_p.parent / (htm_fil_p.name.split('.')[0]+'_files')
@@ -99,4 +106,5 @@ if not giveup:
 else:
     print(f'{giveup} files not downloaded')
 sus.close()
-os.system('pause')
+if not arg_name:
+    os.system('pause')
