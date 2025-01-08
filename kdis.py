@@ -47,7 +47,7 @@ with open(htm_fil_p, encoding='utf-8') as fil:
     soup = bs4.BeautifulSoup(fil)
 ass = soup.find_all('a')
 hrefs = [i['href'] for i in ass]
-hrefs = [i for i in hrefs if '/data//' in i]
+hrefs = [i for i in hrefs if 'kemono.su/data/' in i]
 names = [i.split('?f=')[1] for i in hrefs]
 hrefs = [i.split('?f=')[0] for i in hrefs]
 '''
